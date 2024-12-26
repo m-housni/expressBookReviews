@@ -27,7 +27,7 @@ public_users.get('/books',function (req, res) {
 
 public_users.get('/',async function (req, res) {
   try {
-    const response = await axios.get('/books');
+    const response = await axios.get('http://localhost:5000/books');
     const books = response.data;
     return res.status(300).json(books);
   } catch (error) {
@@ -36,14 +36,20 @@ public_users.get('/',async function (req, res) {
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  const isbn = req.params.isbn;
+public_users.get('/isbn/:isbn',async function (req, res) {
+  try {
+    const isbn = req.params.isbn;
+    const response = await axios.get('http://localhost:5000/books');
+    const books = response.data;
     const book = books[isbn];
     if (book) {
       return res.status(200).json(book);
     } else {
       return res.status(404).json({ message: "Book not found" });
     }
+  } catch (error) {
+    return res.status(500).json(error); 
+  }
  });
   
 // Get book details based on author
